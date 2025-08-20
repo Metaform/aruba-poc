@@ -24,7 +24,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "mvd"
+rootProject.name = "aruba-provisioner-poc"
 include(":extensions:superuser-seed")
 
 // launcher modules

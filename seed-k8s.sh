@@ -52,7 +52,7 @@ curl -s --location 'http://vps.beardyinc.com/issuer/cs/api/identity/v1alpha/part
 # Create attestation definition
 echo
 echo
-echo "Create attestation definition"
+echo "Create attestation definition (membership)"
 curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations' \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
@@ -63,8 +63,20 @@ curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/partici
     "id": "membership-attestation-def-1"
 }'
 
+echo
+echo
+echo "Create attestation definition (data processor)"
+curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
+--data '{
+    "attestationType": "dataprocessor",
+    "configuration": {
+    },
+    "id": "dataprocessor-attestation-def-1"
+}'
 
-# Create credential definition
+# Create credential definitions
 echo
 echo
 echo "Create credential definition"
@@ -92,5 +104,42 @@ curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/partici
         }
     ],
     "rules": [],
-    "format": "VC1_0_JWT"
+    "format": "VC1_0_JWT",
+    "validity": "604800"
+}'
+
+echo
+echo
+echo "Create credential definition (dataprocessor)"
+curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
+--data '{
+    "attestations": [
+        "dataprocessor-attestation-def-1"
+    ],
+    "credentialType": "DataProcessorCredential",
+    "id": "dataprocessor-credential-def",
+    "jsonSchema": "{}",
+    "jsonSchemaUrl": "https://example.com/schema/dataprocessor-credential.json",
+    "mappings": [
+        {
+            "input": "contractVersion",
+            "output": "credentialSubject.contractVersion",
+            "required": "true"
+        },
+        {
+            "input": "level",
+            "output": "credentialSubject.level",
+            "required": true
+        },
+        {
+          "input": "id",
+          "output": "credentialSubject.id",
+          "required": true
+        }
+    ],
+    "rules": [],
+    "format": "VC1_0_JWT",
+    "validity": "604800"
 }'
