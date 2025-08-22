@@ -21,13 +21,9 @@ name: Build and Push Launcher Images
 
 on:
   push:
-    branches: [ main, demo/liqo-multicluster ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_run:
-    workflows:
-      - "Execute E2E Tests"
-    types: [ completed ]
 
 jobs:
   build-and-push:
@@ -35,25 +31,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: identity-hub
-            context: launchers/identity-hub
-            dockerfile: launchers/identity-hub/src/main/docker/Dockerfile
-
           - name: issuerservice
             context: launchers/issuerservice
             dockerfile: launchers/issuerservice/src/main/docker/Dockerfile
-
-          - name: controlplane
-            context: launchers/controlplane
-            dockerfile: launchers/controlplane/src/main/docker/Dockerfile
-
-          - name: dataplane
-            context: launchers/dataplane
-            dockerfile: launchers/dataplane/src/main/docker/Dockerfile
-
-          - name: catalog-server
-            context: launchers/catalog-server
-            dockerfile: launchers/catalog-server/src/main/docker/Dockerfile
 
     steps:
       - name: Checkout code

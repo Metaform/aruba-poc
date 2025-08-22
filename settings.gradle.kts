@@ -24,7 +24,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "aruba-provisioner-poc"
+rootProject.name = "aruba-poc"
 include(":extensions:superuser-seed")
 
 // launcher modules
