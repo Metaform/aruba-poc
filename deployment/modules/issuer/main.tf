@@ -84,7 +84,7 @@ resource "kubernetes_deployment" "issuerservice" {
             }
             failure_threshold = 10
             period_seconds    = 5
-            timeout_seconds   = 30
+            timeout_seconds   = 120
           }
 
           readiness_probe {
@@ -94,7 +94,7 @@ resource "kubernetes_deployment" "issuerservice" {
             }
             failure_threshold = 10
             period_seconds    = 5
-            timeout_seconds   = 30
+            timeout_seconds   = 120
           }
 
           startup_probe {
@@ -104,7 +104,7 @@ resource "kubernetes_deployment" "issuerservice" {
             }
             failure_threshold = 10
             period_seconds    = 5
-            timeout_seconds   = 30
+            timeout_seconds   = 120
           }
         }
       }
