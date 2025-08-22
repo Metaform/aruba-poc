@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "provisioner-ns" {
   metadata {
-    name = "mvd-provisioner"
+    name = "poc-provisioner"
   }
 }
 
@@ -38,52 +38,30 @@ resource "kubernetes_cluster_role_binding" "provisioner-crb" {
   }
 }
 
-resource "kubernetes_secret" "ghcr-secret" {
-  metadata {
-    name      = "ghcr-secret"
-    namespace = kubernetes_namespace.provisioner-ns.metadata.0.name
-  }
-  type = "kubernetes.io/dockerconfigjson"
-  data = {
-    ".dockerconfigjson" = jsonencode({
-      auths = {
-        "ghcr.io" = {
-          username = var.ghcr_username
-          password = var.ghcr_pat
-          auth     = base64encode("${var.ghcr_username}:${var.ghcr_pat}")
-        }
-      }
-    })
-  }
-}
 
-
-resource "kubernetes_deployment" "go-provisioner" {
+resource "kubernetes_deployment" "provisioner" {
   metadata {
-    name      = "go-provisioner"
+    name      = "provisioner"
     namespace = kubernetes_namespace.provisioner-ns.metadata.0.name
   }
   spec {
     replicas = "1"
     selector {
       match_labels = {
-        app = "go-provisioner"
+        app = "provisioner"
       }
     }
     template {
       metadata {
         labels = {
-          app = "go-provisioner"
+          app = "provisioner"
         }
       }
       spec {
         service_account_name = kubernetes_service_account.provisioner-sa.metadata.0.name
-        image_pull_secrets {
-          name = "ghcr-secret"
-        }
         container {
-          name              = "go-provisioner"
-          image             = "ghcr.io/paullatzelsperger/go-provisioner:latest"
+          name              = "provisioner"
+          image             = "ghcr.io/metaform/aruba-provisioner:latest"
           image_pull_policy = "Always"
           port {
             container_port = 9999
@@ -94,14 +72,14 @@ resource "kubernetes_deployment" "go-provisioner" {
   }
 }
 
-resource "kubernetes_service" "go-provisioner-service" {
+resource "kubernetes_service" "provisioner-service" {
   metadata {
-    name      = "go-provisioner-service"
+    name      = "provisioner-service"
     namespace = kubernetes_namespace.provisioner-ns.metadata.0.name
   }
   spec {
     selector = {
-      app = kubernetes_deployment.go-provisioner.spec.0.template.0.metadata.0.labels.app
+      app = kubernetes_deployment.provisioner.spec.0.template.0.metadata.0.labels.app
     }
     port {
       port        = 9999
@@ -113,7 +91,7 @@ resource "kubernetes_service" "go-provisioner-service" {
 
 resource "kubernetes_ingress_v1" "provisioner-ingress" {
   metadata {
-    name      = "go-provisioner"
+    name      = "provisioner"
     namespace = kubernetes_namespace.provisioner-ns.metadata.0.name
     annotations = {
       "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
@@ -129,7 +107,7 @@ resource "kubernetes_ingress_v1" "provisioner-ingress" {
           backend {
 
             service {
-              name = kubernetes_service.go-provisioner-service.metadata.0.name
+              name = kubernetes_service.provisioner-service.metadata.0.name
               port {
                 number = 9999
               }

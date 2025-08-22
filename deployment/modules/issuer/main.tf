@@ -38,7 +38,7 @@ resource "kubernetes_deployment" "issuerservice" {
       spec {
         container {
           image_pull_policy = var.image-pull-policy
-          image             = "ghcr.io/paullatzelsperger/minimumviabledataspace/issuerservice:latest"
+          image             = "ghcr.io/metaform/aruba-poc/issuerservice:latest"
           name              = "issuerservice"
 
           env_from {

@@ -46,6 +46,6 @@ provider "helm" {
 
 resource "kubernetes_namespace" "ns-issuer" {
   metadata {
-    name = "mvd-issuer"
+    name = "poc-issuer"
   }
 }
