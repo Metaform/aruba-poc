@@ -16,6 +16,17 @@
 
 set -euo pipefail
 
+# Parse command line arguments, set --host if provided
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --host) HOST="$2"; shift ;;
+        *) shift ;;
+    esac
+done
+
+# Set default value for HOST if not provided
+HOST=${HOST:-localhost}
+
 ###############################################
 # SEED ISSUER SERVICE
 ###############################################
@@ -44,7 +55,7 @@ DATA_ISSUER='{
             }
       }'
 
-curl -s --location 'http://vps.beardyinc.com/issuer/cs/api/identity/v1alpha/participants/' \
+curl -s --location "http://${HOST}/issuer/cs/api/identity/v1alpha/participants/" \
 --header 'Content-Type: application/json' \
 --data "$DATA_ISSUER"
 
@@ -53,7 +64,7 @@ curl -s --location 'http://vps.beardyinc.com/issuer/cs/api/identity/v1alpha/part
 echo
 echo
 echo "Create attestation definition (membership)"
-curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations' \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -66,7 +77,7 @@ curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/partici
 echo
 echo
 echo "Create attestation definition (data processor)"
-curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations' \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -80,7 +91,7 @@ curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/partici
 echo
 echo
 echo "Create credential definition"
-curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions' \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -111,7 +122,7 @@ curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/partici
 echo
 echo
 echo "Create credential definition (dataprocessor)"
-curl -s --location 'http://vps.beardyinc.com/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions' \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
