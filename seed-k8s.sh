@@ -27,6 +27,8 @@ done
 # Set default value for HOST if not provided
 HOST=${HOST:-localhost}
 
+echo "Seeding data to ingress host $HOST"
+
 ###############################################
 # SEED ISSUER SERVICE
 ###############################################
@@ -39,15 +41,15 @@ DATA_ISSUER='{
             "serviceEndpoints":[
               {
                  "type": "IssuerService",
-                 "serviceEndpoint": "http://dataspace-issuer-service.mvd-issuer.svc.cluster.local:10012/api/issuance/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==",
+                 "serviceEndpoint": "http://dataspace-issuer-service.poc-issuer.svc.cluster.local:10012/api/issuance/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==",
                  "id": "issuer-service-1"
               }
             ],
             "active": true,
-            "participantId": "did:web:dataspace-issuer-service.mvd-issuer.svc.cluster.local%3A10016:issuer",
-            "did": "did:web:dataspace-issuer-service.mvd-issuer.svc.cluster.local%3A10016:issuer",
+            "participantId": "did:web:dataspace-issuer-service.poc-issuer.svc.cluster.local%3A10016:issuer",
+            "did": "did:web:dataspace-issuer-service.poc-issuer.svc.cluster.local%3A10016:issuer",
             "key":{
-                "keyId": "did:web:dataspace-issuer-service.mvd-issuer.svc.cluster.local%3A10016:issuer#key-1",
+                "keyId": "did:web:dataspace-issuer-service.poc-issuer.svc.cluster.local%3A10016:issuer#key-1",
                 "privateKeyAlias": "key-1",
                 "keyGeneratorParams":{
                   "algorithm": "EdDSA"
@@ -64,7 +66,7 @@ curl -s --location "http://${HOST}/issuer/cs/api/identity/v1alpha/participants/"
 echo
 echo
 echo "Create attestation definition (membership)"
-curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -77,7 +79,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 echo
 echo
 echo "Create attestation definition (data processor)"
-curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -91,7 +93,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 echo
 echo
 echo "Create credential definition"
-curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
@@ -122,7 +124,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 echo
 echo
 echo "Create credential definition (dataprocessor)"
-curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UubXZkLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
+curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
 --data '{
