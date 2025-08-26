@@ -212,6 +212,22 @@ Data seeding complete in namespace aruba07
 (an alternative would be to wait for individual deployments with `kubectl wait deployment identityhub --namespace aruba02 --for=condition=available
 --timeout=60s`)
 
+### 4.4 Delete a participant
+
+Similar to the provisioning request, a participant can be de-provisioned by executing
+
+```shell
+curl -X DELETE http://192.168.1.239/provisioner/api/v1/resources \
+  -d '{
+        "participantName": "aruba07",
+        "kubeHost": "192.168.1.230"
+      }' \
+  -H "content-type: application/json"
+```
+
+this also is an asynchronous operation, so the provisioner will respond immediately with HTTP 20x. The actual deletion progress can be observed by inspecting
+the pods in the participant's namespace, e.g. by executing `kubectl get pods -n aruba07 -w` until all pods are gone.
+
 ### 4.4 Requesting a credential
 
 After the participant has been created, it can request verifiable credentials from the IssuerService. For this, we use the participant's "IdentityApi" to talk
