@@ -1,5 +1,24 @@
 # Proof-of-Concept Aruba + EDC
 
+## Table of Contents
+
+- [1. Introduction](#1-introduction)
+- [2. Definition of terms](#2-definition-of-terms)
+- [3. Prerequisites and requirements](#3-prerequisites-and-requirements)
+  - [3.1 Prerequisites](#31-prerequisites)
+  - [3.2 Kubernetes network requirements](#32-kubernetes-network-requirements)
+- [4. Getting started](#4-getting-started)
+  - [4.1 Deploy base infrastructure](#41-deploy-base-infrastructure)
+  - [4.2 Seeding initial data](#42-seeding-initial-data)
+  - [4.3 Create participants](#43-create-participants)
+  - [4.4 Requesting a credential](#44-requesting-a-credential)
+- [5. Components and setup](#5-components-and-setup)
+  - [Base infrastructure](#base-infrastructure)
+    - [IssuerService](#issuerservice)
+    - [Credential types](#credential-types)
+    - [Provisioner agent](#provisioner-agent)
+- [6. References](#6-references)
+
 ## 1. Introduction
 
 This Proof-of-Concept (PoC) demonstrates how to onboard participants into a dataspace based on Eclipse Dataspace Components. It implements the following main
@@ -316,7 +335,7 @@ notified when a deployment is ready, is to inspect the logs of the provisioner. 
 **Multi-tenancy**: In the current PoC, multi-tenancy is implemented by creating a separate Kubernetes namespace for each participant. In production scenarios,
 this will likely be different.
 
-## X. References
+## 6. References
 
 | Reference                       | Link                                                                    | Used for                                                              |
 | ------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
