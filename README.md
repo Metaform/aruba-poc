@@ -13,10 +13,11 @@
   - [4.3 Create participants](#43-create-participants)
   - [4.4 Requesting a credential](#44-requesting-a-credential)
 - [5. Components and setup](#5-components-and-setup)
-  - [Base infrastructure](#base-infrastructure)
-    - [IssuerService](#issuerservice)
-    - [Credential types](#credential-types)
-    - [Provisioner agent](#provisioner-agent)
+  - [5.1 Base infrastructure](#51-base-infrastructure)
+    - [5.1.1 IssuerService](#511-issuerservice)
+    - [5.1.2 Provisioner agent](#512-provisioner-agent)
+    - [5.1.3 Credential types](#513-credential-types)
+  - [5.2 Participant infrastructure](#52-participant-infrastructure)
 - [6. References](#6-references)
 
 ## 1. Introduction
@@ -266,12 +267,16 @@ The PoC consists of two main classes of components:
 1. base infrastructure, consisting of the IssuerService and the Provisioner agent
 2. participant infrastructure, consisting of the Identity Hub, the Control Plane and the Data Plane plus their dependencies (primarily PostgreSQL and Vault).
 
-### Base infrastructure
+The following diagram illustrates the overall architecture:
 
-The base infrastructure is deployed once per cluster and consists of the IssuerService and the Provisioner agent. This is done by running the Terraform/OpenTofu
-scripts in the `deployment` folder, see [section 3.3](#33-deploy-base-infrastructure) for details.
+![Architecture diagram](./docs/images/architecture.svg)
 
-#### IssuerService
+### 5.1 Base infrastructure
+
+The base infrastructure (shown in pink) is deployed once per cluster and consists of the IssuerService and the Provisioner agent. This is done by running the Terraform/OpenTofu
+scripts in the `deployment` folder, see [section 3.3](#41-deploy-base-infrastructure) for details.
+
+#### 5.1.1 IssuerService
 
 This is a DCP-compliant issuer service that receives verifiable credential requests from participants and issues the requested credentials. It is based on the
 [reference implementation](https://github.com/eclipse-edc/IdentityHub/blob/main/docs/developer/architecture/issuer/issuance/issuance.process.md) of the
@@ -282,7 +287,32 @@ credentials comes from so-called `AttestationDefinitions` which are linked to th
 credential type in the IssuerService's [code base](./launchers/issuerservice/src/main/java/org/eclipse/edc/issuerservice/seed/attestation/), but in a production
 scenario this data would likely come from an external source, e.g. a database or an API.
 
-#### Credential types
+#### 5.1.2 Provisioner agent
+
+The provisioner agent is responsible for deploying the participant infrastructure on behalf of an onboarding platform. It exposes a REST API that can be used to
+request the provisioning and the de-provisioning of a new participant by providing the participant's name and DID, see [section 4.3](#43-create-participants)
+for details.
+
+In practice, the provisioner agent will create the following resources for each participant:
+
+- a control plane: this is the connector's DSP endpoint that handles contract negotiations etc.
+- a data plane: this is a (very simple) http data plane to transmit example data
+- an IdentityHub: this is the credential storage and DCP implementation
+- dependencies like a PostgreSQL database and a Vault for secrets storage.
+
+In addition, the provisioner agent also pre-configures each participant with demo data:
+
+- assets, policies and contract definitions
+- an account in its IdentityHub, so that the participant may present its credentials to other participants
+- an account on the IssuerService, so that the participant may request credentials to be issued
+
+**Asynchronous operation**: Provisioning participant data may take some time, depending on physical hardware and network layout. Currently, the only way to get
+notified when a deployment is ready, is to inspect the logs of the provisioner. In production scenarios, that would likely be handled using an eventing system.
+
+**Multi-tenancy**: In the current PoC, multi-tenancy is implemented by creating a separate Kubernetes namespace for each participant. In production scenarios,
+this will likely be different.
+
+#### 5.1.3 Credential types
 
 In this PoC there are two types of credentials: a `MembershipCredential`, which attests to a participant being an active member of the dataspace, and a
 `DataProcessorCredential`, which attests to a participant's access level - either `"processing"` or `"sensitive"`.
@@ -310,30 +340,12 @@ When issuing a `DataProcessorCredential`, the `DataProcessorAttestationSource` c
 These credentials are used to authenticate and authorize DSP/DCP requests from one connector to another. Each new dataspace member will receive both
 credentials.
 
-#### Provisioner agent
+### 5.2 Participant infrastructure
 
-The provisioner agent is responsible for deploying the participant infrastructure on behalf of an onboarding platform. It exposes a REST API that can be used to
-request the provisioning and the de-provisioning of a new participant by providing the participant's name and DID, see [section 3.4](#34-create-participants)
-for details.
+The participant infrastructure (shown in purple) is deployed for each participant by the Provisioner agent, see [section 3.4](#43-create-participants) for
+details. It includes a control plane, a data plane and an IdentityHub, plus dependencies like PostgreSQL and Vault.
 
-In practice, the provisioner agent will create the following resources for each participant:
-
-- a control plane: this is the connector's DSP endpoint that handles contract negotiations etc.
-- a data plane: this is a (very simple) http data plane to transmit example data
-- an IdentityHub: this is the credential storage and DCP implementation
-- dependencies like a PostgreSQL database and a Vault for secrets storage.
-
-In addition, the provisioner agent also pre-configures each participant with demo data:
-
-- assets, policies and contract definitions
-- an account in its IdentityHub, so that the participant may present its credentials to other participants
-- an account on the IssuerService, so that the participant may request credentials to be issued
-
-**Asynchronous operation**: Provisioning participant data may take some time, depending on physical hardware and network layout. Currently, the only way to get
-notified when a deployment is ready, is to inspect the logs of the provisioner. In production scenarios, that would likely be handled using an eventing system.
-
-**Multi-tenancy**: In the current PoC, multi-tenancy is implemented by creating a separate Kubernetes namespace for each participant. In production scenarios,
-this will likely be different.
+They come pre-configured with some demo data (assets, policies, contract definitions) and an account in the IdentityHub and the IssuerService.
 
 ## 6. References
 
