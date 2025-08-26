@@ -64,7 +64,6 @@ curl -s --location "http://${HOST}/issuer/cs/api/identity/v1alpha/participants/"
 ## Seed participant data to the issuer service
 # Create attestation definition
 echo
-echo
 echo "Create attestation definition (membership)"
 curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
@@ -77,8 +76,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 }'
 
 echo
-echo
-echo "Create attestation definition (data processor)"
+echo "Create attestation definition (dataprocessor)"
 curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/attestations" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
@@ -91,8 +89,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 
 # Create credential definitions
 echo
-echo
-echo "Create credential definition"
+echo "Create credential definitio (membership)"
 curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
@@ -121,7 +118,6 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
     "validity": "604800"
 }'
 
-echo
 echo
 echo "Create credential definition (dataprocessor)"
 curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
