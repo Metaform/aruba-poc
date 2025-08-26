@@ -328,6 +328,8 @@ notified when a deployment is ready, is to inspect the logs of the provisioner. 
 **Multi-tenancy**: In the current PoC, multi-tenancy is implemented by creating a separate Kubernetes namespace for each participant. In production scenarios,
 this will likely be different.
 
+_The partitioning agent's source code can be found in [this GitHub repository](https://github.com/Metaform/aruba-provisioner)._
+
 #### 5.1.3 Credential types
 
 In this PoC there are two types of credentials: a `MembershipCredential`, which attests to a participant being an active member of the dataspace, and a
