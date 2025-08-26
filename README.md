@@ -4,12 +4,15 @@
 
 ## 2. Definition of terms
 
-- _user_
-- _participant_
-- _participantContext_
-- _verifiable credential_
-- issuer
-- holder
+- _user_: a person interacting with various APIs that one particular _participant_ exposes
+- _participant_: a participating entity in a dataspace, e.g. a company or an organization. This is NOT a human being, but rather a legal entity.
+- _participantContext_: technically, IdentityHub is multi-tenant, so it could handle multiple participants in one instance. In this PoC, however, each
+  participant gets its own IdentityHub instance, so there is only one participantContext per IdentityHub. A _participantContext_ is identified by its
+  _participantContextId_, which - for the purposes of this PoC - is identical to the participant's DID.
+- _verifiable credential_: a structured, cryptographically verifiable claim about a _participant_ that is issued by an _issuer_ and held by a _holder_. A VC is
+  a JSON document, secured by a proof, e.g. a digital signature.
+- _issuer_: an entity that issues verifiable credentials to participants. In this PoC, the IssuerService is the issuer. An issuer must be trusted by the participants.
+- _holder_: an entity that holds verifiable credentials. In this PoC, the IdentityHub acts as the holder.
 
 ## 3. Getting started
 
@@ -205,7 +208,7 @@ From that point forward, the `MembershipCredential` and the `DataProcessorCreden
 
 The PoC consists of two main classes of components:
 
-1. base infrastructure, consisting of the IssuerService and the Provisioner agent
+1. , consisting of the IssuerService and the Provisioner agent
 2. participant infrastructure, consisting of the Identity Hub, the Control Plane and the Data Plane plus their
    dependencies (primarily PostgreSQL and Vault).
 
