@@ -164,7 +164,7 @@ curl -X POST http://192.168.1.230/provisioner/api/v1/resources \
   -d '{
         "participantName": "aruba07",
         "did": "did:web:identityhub.aruba07.svc.cluster.local%3A7083:aruba07",
-        "kubeHost":"192.168.1.230"
+        "kubeHost": "http://192.168.1.230"
       }' \
   -H "content-type: application/json"
 ```
@@ -220,7 +220,7 @@ Similar to the provisioning request, a participant can be de-provisioned by exec
 curl -X DELETE http://192.168.1.239/provisioner/api/v1/resources \
   -d '{
         "participantName": "aruba07",
-        "kubeHost": "192.168.1.230"
+        "kubeHost": "http://192.168.1.230"
       }' \
   -H "content-type: application/json"
 ```
