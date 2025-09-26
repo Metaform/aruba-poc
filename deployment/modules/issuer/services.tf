@@ -49,5 +49,9 @@ resource "kubernetes_service" "issuerservice-service" {
       name = "did"
       port = var.ports.did
     }
+    port {
+      name = "statuslist"
+      port = var.ports.statuslist
+    }
   }
 }

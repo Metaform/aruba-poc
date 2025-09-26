@@ -119,6 +119,7 @@ resource "kubernetes_config_map" "issuerservice-config" {
   }
 
   data = {
+    EDC_HOSTNAME                            = "${lower(var.humanReadableName)}.${var.namespace}.svc.cluster.local"
     EDC_ISSUER_STATUSLIST_SIGNING_KEY_ALIAS = "statuslist-signing-key"
     EDC_IH_API_SUPERUSER_KEY                = var.superuser_apikey
     WEB_HTTP_PORT                           = var.ports.web
@@ -136,7 +137,9 @@ resource "kubernetes_config_map" "issuerservice-config" {
     WEB_HTTP_IDENTITY_AUTH_KEY              = "password"
     WEB_HTTP_DID_PORT                       = var.ports.did
     WEB_HTTP_DID_PATH                       = "/"
-
+    WEB_HTTP_STATUSLIST_PORT                = var.ports.statuslist
+    WEB_HTTP_STATUSLIST_PATH                = "/statuslist"
+    
     JAVA_TOOL_OPTIONS               = "${var.useSVE ? "-XX:UseSVE=0 " : ""}-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=${var.ports.debug}"
     EDC_VAULT_HASHICORP_URL         = var.vault-url
     EDC_VAULT_HASHICORP_TOKEN       = var.vault-token

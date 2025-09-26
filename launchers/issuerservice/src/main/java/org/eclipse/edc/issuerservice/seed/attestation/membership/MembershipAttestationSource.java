@@ -25,6 +25,7 @@ public class MembershipAttestationSource implements AttestationSource {
     @Override
     public Result<Map<String, Object>> execute(AttestationContext attestationContext) {
         return Result.success(Map.of(
+                "membership", Map.of("since", Instant.now().toString()),
                 "membershipType", "full-member",
                 "membershipStartDate", Instant.now().toString(),
                 "id", attestationContext.participantId()));

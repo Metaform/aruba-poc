@@ -89,7 +89,7 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
 
 # Create credential definitions
 echo
-echo "Create credential definitio (membership)"
+echo "Create credential definition (membership)"
 curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlkOndlYjpkYXRhc3BhY2UtaXNzdWVyLXNlcnZpY2UucG9jLWlzc3Vlci5zdmMuY2x1c3Rlci5sb2NhbCUzQTEwMDE2Omlzc3Vlcg==/credentialdefinitions" \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: c3VwZXItdXNlcg==.c3VwZXItc2VjcmV0LWtleQo=' \
@@ -102,6 +102,11 @@ curl -s --location "http://${HOST}/issuer/ad/api/admin/v1alpha/participants/ZGlk
     "jsonSchema": "{}",
     "jsonSchemaUrl": "https://example.com/schema/membership-credential.json",
     "mappings": [
+        {
+              "input": "membership",
+              "output": "credentialSubject.membership",
+              "required": true
+        },
         {
             "input": "membershipType",
             "output": "credentialSubject.membershipType",

@@ -42,6 +42,7 @@ variable "ports" {
     identity    = number
     debug       = number
     did         = number
+    statuslist  = number
   })
   default = {
     web         = 10010
@@ -52,6 +53,7 @@ variable "ports" {
     identity    = 10015
     did         = 10016
     debug       = 1044
+    statuslist  = 9999
   }
 }
 
